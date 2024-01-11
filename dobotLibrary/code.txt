@@ -1,0 +1,50 @@
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(9600);
+}
+
+
+void loop() {
+  int allow = 0;
+while(int john=1){
+float sensorvalue=analogRead(A0);
+  // put your main code here, to run repeatedly:
+//float vol = sensorvalue * (5.0/1023.0);
+delay(100);
+//Serial.println(vol);
+
+if (sensorvalue < 1000) {
+  allow=1;
+}
+
+while (allow=1){
+float sensorvalue=analogRead(A0);
+if (sensorvalue < 50) {
+  Serial.println("I NEED AN ADULT");
+} else {
+  if (sensorvalue < 200) {
+  Serial.println("PERSONAL SPACE NEEDED");
+} else {
+  if (sensorvalue < 400) {
+  Serial.println("I can smell you, stop");
+} else {
+  if (sensorvalue < 600) {
+  Serial.println("Perfect");
+} else {
+  if (sensorvalue < 800) {
+  Serial.println("Come closer my child");
+} else {
+if (sensorvalue < 2000) {
+  Serial.println("where are you?");
+}
+}
+}
+}
+}
+}
+
+}
+
+}
+}
+  
