@@ -2,7 +2,6 @@
 #ifndef EASYBYTES_H
 #define EASYBYTES_H
 
-#include "easyBytes.h"
 #include <vector>
 #include <iterator>
 

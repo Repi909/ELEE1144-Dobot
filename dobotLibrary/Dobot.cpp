@@ -14,25 +14,24 @@ union coord {
   byte cByte[4];
   float cFloat;
 };
+
 coord cart[4];  //position of the arm in cartesian coordinates
 coord pol[4];  //position of the arm in polar coordinates
-///////////////////////////////////////////////////////////////
 
-///////////////////////////  Empty Constructor  ///////////////
+//  Empty Constructor
 Dobot::Dobot(){
 };
-///////////////////////////////////////////////////////////////
 
-////////////////////////////// Setup //////////////////////////
+// Setup
 void Dobot::begin(){
     Serial.begin(115200);
     pinMode(2,INPUT);
     pinMode(3,OUTPUT);
     mySerial.begin(115200);  //Dobot baud rate
+    makeSafe();
 }
 
-
-////////////////////////////////////  Print Current Pose  ///////////
+//  Print Current Pose
 void  Dobot::printPose(){
 
 for(int i=0;i<6;i++){
@@ -83,10 +82,6 @@ Serial.print(' ');
 Serial.println();
 delay(1000);
 }
-//////////////////////////////////////////////////////////////////////////////
-
-
-
 
 void Dobot::commandFrame(byte comFrame[]){
   
@@ -103,4 +98,21 @@ while (mySerial.available() > 0){
   Serial.print(' ');
   }
   Serial.println();
+}
+
+void load(uint8_t blockType, uint8_t counter){
+
+}
+
+void unload(uint8_t blockType, uint8_t counter){
+
+}
+
+
+void move(uint8_t blockType, uint8_t counter){
+
+}
+
+void makeSafe(){
+
 }
