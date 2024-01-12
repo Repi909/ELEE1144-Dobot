@@ -1,20 +1,28 @@
 #include "easyBytes.h"
 #include <vector>
 #include <iterator>
+#include <iostream>
 
 template <typename OutIter>
-void writeBytes(OutIter iter)
+easyBytes::easyBytes(){
+
+};
+
+template <typename OutIter>
+void easyBytes::writeBytes(OutIter iter)
 {
     for (...) { *iter = data(); ++iter; }
 }
 
-std::vector<uint8_t> toBytes(std::vector<uint8_t> result){
+template <typename OutIter>
+std::vector<uint8_t> easyBytes::toBytes(std::vector<uint8_t> result){
 
-    writeBytes(std::back_inserter(result));
+    easyBytes::writeBytes(std::back_inserter(result));
     return result;
 }
 
-uint8_t checksumCalc(std::vector<uint8_t> payload){
+template <typename OutIter>
+uint8_t easyBytes::checksumCalc(std::vector<uint8_t> payload){
     
     return (sizeof(payload) + sizeof(uint8_t) * payload.size());
 }
