@@ -2,18 +2,20 @@
 #ifndef DOBOT_H
 #define DOBOT_H
 
-class Dobot
+class Dobot : public irSensor, public blockMap, public Counter
 {
     public:
         Dobot();
         void begin();
-        void load(uint8_t blockType, uint8_t counter);
-        void unload(uint8_t blockType, uint8_t counter);
+        void load();
+        void unload(uint8_t storageBay);
 
     private:
-        void printPose();
         void move(uint8_t blockType, uint8_t counter);
         void makeSafe();
+        void suckStart();
+        void suckStop();
+        //void printPose();
 
 };
 
