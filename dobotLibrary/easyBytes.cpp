@@ -24,5 +24,5 @@ std::vector<uint8_t> easyBytes::toBytes(std::vector<uint8_t> result){
 template <typename OutIter>
 uint8_t easyBytes::checksumCalc(std::vector<uint8_t> payload){
     
-    return (sizeof(payload) + sizeof(uint8_t) * payload.size());
+    return (255-(sizeof(payload) + sizeof(uint8_t) * payload.size())); // to calculate 2s complement
 }

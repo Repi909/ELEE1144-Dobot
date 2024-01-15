@@ -42,13 +42,12 @@ void Dobot::begin(){
   Serial.print("Dobot initialised!\nPlease place a block in the loading bay.")
 }
 
-//loads a block in to a storage bay based on block type. Moves block from import bay
-void Dobot::load(){
+//loads a block in to a storage bay based on block type passed in as argument. Moves block from import bay
+void Dobot::load(uint8_t blockType){
   
-  uint8_t blockType = irSensor::blockDetector();
+  // uint8_t blockType = irSensor::blockDetector();
   if(blockType < 100){
     Serial.println("Loading...");
-
     if(blockType == 0){
       Dobot::move(30,1) //import bay
       Dobot::suckStart();
@@ -70,7 +69,6 @@ void Dobot::load(){
       Dobot::suckStop();
       counter.blackValue++;
     }
-
     Dobot::move(30,0);
     Serial.println("Loading complete!");
   }
@@ -90,7 +88,6 @@ void Dobot::unload(uint8_t storageBay){
       Dobot::suckStop();
       counter.whiteValue--;
     }
-
     else if(storageBay == 1){
       Dobot::move(10,counter.redValue);
       Dobot::suckStart();
@@ -98,7 +95,6 @@ void Dobot::unload(uint8_t storageBay){
       Dobot::suckStop();
       counter.redValue--;
     }
-
     else if(storageBay == 2){
       Dobot::move(20,counter.blackValue);
       Dobot::suckStart();
@@ -106,11 +102,9 @@ void Dobot::unload(uint8_t storageBay){
       Dobot::suckStop();
       counter.blackValue--;
     }
-
     Dobot::move(30,0);
     Serial.println("Unloading complete!");
   }
-
   else{
     Serial.println("Invalid storage bay selected! Choose bay 0, 1 or 2.")
   }

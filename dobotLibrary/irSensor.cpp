@@ -3,6 +3,10 @@
 
 irSensor::irSensor(){};
 
+bool irSensor::blockPresent(){
+    
+}
+
 uint8_t irSensor::readSensor(){
     uint8_t avgSensorValue;
     for (int i =0, i< 101, i++){
@@ -13,7 +17,7 @@ uint8_t irSensor::readSensor(){
 
 //blockTypeCheck returns a numeric value in multiples of 10 as a maximum of 10 blocks for each type can be placed.
 //number is used within blockMap to return position element.
-uint8_t irSensor::blockDetector(){
+uint8_t irSensor::blockTypeDetector(){
     
     uint8_t avgSensorValue = irSensor::readSensor();
 

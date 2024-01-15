@@ -6,7 +6,8 @@ class irSensor{
 
     public:
         irSensor();
-        uint8_t blockDetector();
+        bool blockPresent();
+        uint8_t blockTypeDetector();
     
     private:
         uint8_t readSensor();
