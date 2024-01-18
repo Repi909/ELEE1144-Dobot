@@ -7,7 +7,7 @@ class Dobot : public irSensor, public blockMap, public Counter
     public:
         Dobot();
         void begin();
-        void load();
+        void load(uint8_t blockType);
         void unload(uint8_t storageBay);
 
     private:

@@ -4,7 +4,13 @@
 irSensor::irSensor(){};
 
 bool irSensor::blockPresent(){
-    
+    uint8_t sensorValue = readSensor();
+    if(760 <= sensorValue <= 885){
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 uint8_t irSensor::readSensor(){

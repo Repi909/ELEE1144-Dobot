@@ -35,7 +35,10 @@ void Dobot::begin(){
   mySerial.begin(115200);  //Dobot baud rate
 
   //create counter object
-  Counter counter;
+  counter counter;
+
+  //create blockmap object
+  blockmap bMap;
 
   //execute safe procedure
   Dobot::makeSafe();
@@ -126,7 +129,7 @@ void Dobot::makeSafe(){
 //move dobot arm to position specified in map by using blockType as multiple of 10 and counter for last block placed.
 void Dobot::move(uint8_t blockType, uint8_t counter){
 
-  vector<uint8_t> storageLocation = blockMap::accessValue(blockType, counter);
+  vector<uint8_t> storageLocation = blockMap::getLocation(blockType, counter);
   for(int i=0;i<storageLocation.size();i++){
     mySerial.write(storageLocation[i]);
   }
@@ -134,7 +137,7 @@ void Dobot::move(uint8_t blockType, uint8_t counter){
 
 //starts pump for suction
 void Dobot::suckStart(){
-  vector<uint8_t> suckStartPayload = blockMap::accessValue(30,3);
+  vector<uint8_t> suckStartPayload = blockMap::getLocation(30,3);
   for(int i=0; i<suckStartPayload.size(); i++){
     mySerial.write(suckStartPayload[i]);
   }
@@ -142,7 +145,7 @@ void Dobot::suckStart(){
 
 //stops pump for suction
 void Dobot::suckStop(){
-  vector<uint8_t> suckStopPayload = blockMap::accessValue(30,3);
+  vector<uint8_t> suckStopPayload = blockMap::getLocation(30,3);
   for(int i=0;i<suckStopPayload.size();i++){
     mySerial.write(suckStopPayload[i]);
   }
