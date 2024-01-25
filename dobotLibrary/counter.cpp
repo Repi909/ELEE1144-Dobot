@@ -1,3 +1,4 @@
+#include <iostream>
 #include "counter.h"
 
 Counter::Counter(){

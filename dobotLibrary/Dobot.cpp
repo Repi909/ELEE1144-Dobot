@@ -1,10 +1,4 @@
-#include "Arduino.h"
 #include "Dobot.h"
-#include "SoftwareSerial.h"
-#include "blockMap.h"
-#include "irSensor.h"
-#include "counter.h"
-
 
 //Globals:
 SoftwareSerial mySerial = SoftwareSerial(2,3);  //Rx, Tx

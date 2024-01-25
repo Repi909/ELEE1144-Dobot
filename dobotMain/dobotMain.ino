@@ -3,27 +3,29 @@
 #include "Arduino.h"
 
 Dobot dobot = Dobot();
+char readMessage = -1;
 
-int setup(){
+void setup(){
 
   dobot.begin();
   delay(500);
-  return 0;
 }
 
 int main(){
-
-  while(serial.available){
-
-    if (irSensor::blockPresent()){
-      dobot.load(irSensor::blockTypeDetector());
+  if (Serial.available()){
+     readMessage = Serial.read();
+    if (dobot.blockPresent()){
+      dobot.load(dobot.blockTypeDetector());
     }
-    else if(Serial.read()==0|| serial.Read()==1||serial.Read()==2){
-      dobot.unload();
+    else if(readMessage==0|| readMessage==1||readMessage==2){
+      dobot.unload(readMessage);
     }
     else{
       Serial.println("Zzzzzz...");
     }
+    return 0;
+  }
+  else{
     return 0;
   }
 }

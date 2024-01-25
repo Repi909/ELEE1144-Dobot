@@ -4,12 +4,12 @@
 
 #include "Arduino.h"
 #include "SoftwareSerial.h"
-#include "blockMap.h"
+//#include "blockMap.h"
 #include "irSensor.h"
 #include "counter.h"
 
-class Dobot : public irSensor, public blockMap, public Counter
-{
+class Dobot : public irSensor, public Counter {
+  
     public:
         Dobot();
         void begin();
