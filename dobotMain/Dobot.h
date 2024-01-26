@@ -21,6 +21,7 @@ class Dobot : public irSensor, public Counter {
         void makeSafe();
         void suckStart();
         void suckStop();
+        [[nodiscard]] uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex);
         //void printPose();
 
 };

@@ -4,12 +4,12 @@
 
 #include "Arduino.h"
 #include "SoftwareSerial.h"
-//#include "blockMap.h"
+#include "blockMap.h"
 #include "irSensor.h"
 #include "counter.h"
 
-class Dobot : public irSensor, public Counter {
-  
+class Dobot : public irSensor, public blockMap, public Counter
+{
     public:
         Dobot();
         void begin();
@@ -21,7 +21,6 @@ class Dobot : public irSensor, public Counter {
         void makeSafe();
         void suckStart();
         void suckStop();
-        [[nodiscard]] uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex);
         //void printPose();
 
 };

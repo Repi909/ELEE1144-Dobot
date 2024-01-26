@@ -1,11 +1,10 @@
-#include "Arduino.h"
 #include "irSensor.h"
 
-irSensor::irSensor(){}
+irSensor::irSensor(){};
 
 bool irSensor::blockPresent(){
     uint8_t sensorValue = readSensor();
-    if(760 <= sensorValue && sensorValue <= 885){
+    if(760 <= sensorValue <= 885){
         return true;
     }
     else{
@@ -15,7 +14,7 @@ bool irSensor::blockPresent(){
 
 uint8_t irSensor::readSensor(){
     uint8_t avgSensorValue;
-    for (int i =0; i< 101; i++){
+    for (int i =0, i< 101, i++){
         avgSensorValue += analogRead(A0);
     }
     return avgSensorValue/100;
@@ -27,17 +26,17 @@ uint8_t irSensor::blockTypeDetector(){
     
     uint8_t avgSensorValue = irSensor::readSensor();
 
-    if(760 < avgSensorValue && avgSensorValue < 770){
+    if(760 < avgSensorValue < 770){
         Serial.println("White block detected! Starting loading sequence...");
         return 0;
     }
 
-    else if (805 < avgSensorValue && avgSensorValue < 815){
+    else if (805 < avgSensorValue < 815){
         Serial.println("Red block detected! Starting loading sequence...");
         return 10;
     }
 
-    else if(875 < avgSensorValue && avgSensorValue < 885){
+    else if(875 < avgSensorValue < 885){
         Serial.println("Black block detected! Starting loading sequence...");
         return 20;
     }
