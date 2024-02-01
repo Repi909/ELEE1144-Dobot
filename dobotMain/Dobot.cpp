@@ -1,5 +1,4 @@
 #include "Arduino.h"
-#include "ArduinoSTL.h"
 #include "Dobot.h"
 #include "SoftwareSerial.h"
 //#include "blockMap.h"
@@ -7,24 +6,15 @@
 #include "counter.h"
 
 // Globals:
-SoftwareSerial mySerial(2, 3);  // Rx, Tx
-//byte getPose[] = {170, 170, 2, 10, 0, 246};
+SoftwareSerial mySerial(2,3);  // Rx, Tx
 byte incomingByte;  // To collect the response from Dobot
-//byte message[100];  // Longer than the longest possible message
-//int i;
 
-// Create counter object
-Counter counter;
-
-// Create blockmap object
-//blockMap bMap;
-
-// Empty Constructor
 Dobot::Dobot() {
 }
 
-// Setup
-void Dobot::begin() {
+Counter counter = Counter();
+
+void Dobot::init() {
 
   // Init serial comms to Dobot
   Serial.begin(115200);
@@ -33,8 +23,8 @@ void Dobot::begin() {
   mySerial.begin(115200);  // Dobot baud rate
 
   // Execute safe procedure
+  Serial.println("Dobot initialising!");
   Dobot::makeSafe();
-  Serial.println("Dobot initialised!\nPlease place a block in the loading bay.");
 }
 
 // Loads a block into a storage bay based on block type passed in as an argument. Moves block from import bay
@@ -74,7 +64,6 @@ void Dobot::unload(uint8_t storageBay) {
   if (storageBay < 4) {
     Serial.println("Unloading...");
     if (storageBay == 0) {
-      Dobot::move(0, counter.whiteValue);
       Dobot::suckStart();
       Dobot::move(30, 2); // export bay
       Dobot::suckStop();
@@ -103,27 +92,27 @@ void Dobot::unload(uint8_t storageBay) {
 void Dobot::makeSafe(){
 
   for(int i=0;i<3;i++){ 
-    move(30,i);
+    Dobot::move(30,i);
   }
   for(int i=0;i<30;i++){ 
-    move(i,0);
+    Dobot::move(i,0);
     i+=9;
   }
-  move(30,0);
+  Dobot::move(30,0);
 }
 
 //move dobot arm to position specified in map by using blockType as multiple of 10 and counter for last block placed.
 void Dobot::move(uint8_t blockType, uint8_t counter){
 
   for(int i=0;i<23;i++){
-    int byteToSend = getLocation(blockType, counter, i);
+    int byteToSend = Dobot::getLocation(blockType, counter, i);
     mySerial.write(byteToSend);
   }
 }
 
 //starts pump for suction
 void Dobot::suckStart(){
-  int suckStartPayload[]{170,170,4,62,1,1,1,191};
+  int suckStartPayload[]{170,170,4,62,3,1,1,189};
   for(int i=0; i<23; i++){
     mySerial.write(suckStartPayload[i]);
   }
@@ -131,7 +120,7 @@ void Dobot::suckStart(){
 
 //stops pump for suction
 void Dobot::suckStop(){
-  int suckStopPayload[]{170,170,4,62,1,1,0,192};
+  int suckStopPayload[]{170,170,4,62,3,1,0,190};
   for(int i=0;i<23;i++){
     mySerial.write(suckStopPayload[i]);
   }
@@ -184,81 +173,19 @@ uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loop
     return bMap[blockType + counterValue][loopIndex];
 }
 
-///////////////////////////////////////////ARCHIVED////////////////////////////////////////////////////////////////
-
-// Union type makes converting from byte array to float easy:
-// union coord {
-//   byte cByte[4];
-//   float cFloat;
-// }
-
-// coord cart[4];  // Position of the arm in cartesian coordinates
-// coord pol[4];   // Position of the arm in polar coordinates
-//  Print Current Pose
-// void  Dobot::printPose(){
-
-// for(int i=0;i<6;i++){
-//   mySerial.write(getPose[i]);
-// }
-
-// delay(50);  //allow time for the Dobot to serial send a response
-// //Read response back from Dobot:
-// i=0;
-// while (mySerial.available() > 0){
-//   message[i] = mySerial.read();
-//   i++;
-// }
-
-// //distribute the Dobot position bytes to the appropriate coordinates:
-// for(i=0;i<=3;i++){
-//   cart[0].cByte[i] = message[i+5];
-//   cart[1].cByte[i] = message[i+9];
-//   cart[2].cByte[i] = message[i+13];
-//   cart[3].cByte[i] = message[i+17];
-//   pol[0].cByte[i] = message[i+21];
-//   pol[1].cByte[i] = message[i+25];
-//   pol[2].cByte[i] = message[i+29];
-//   pol[3].cByte[i] = message[i+33];
-// }
-// Serial.print("Cartesian: ");
-// Serial.print(cart[0].cFloat);  //The union type means the float equivalent is available
-// Serial.print(" ");
-// Serial.print(cart[1].cFloat);
-// Serial.print(" ");
-// Serial.print(cart[2].cFloat);
-// Serial.print(" ");
-// Serial.print(cart[3].cFloat);
-// Serial.print(" Polar: ");
-// Serial.print(pol[0].cFloat);
-// Serial.print(" ");
-// Serial.print(pol[1].cFloat);
-// Serial.print(" ");
-// Serial.print(pol[2].cFloat);
-// Serial.print(" ");
-// Serial.println(pol[3].cFloat);
-
-// Serial.println("Full dobot message: ");
-// for(int i=0; i<38; i++){
-// Serial.print(message[i]);
-// Serial.print(' ');
-// }
-// Serial.println();
-// delay(1000);
-// }
-
-// void Dobot::commandFrame(byte comFrame[]){
-  
-// for(int i=0;i<(comFrame[2]+4);i++){   //The third comFrame byte gives the number of payload bytes; total number of bytes is 4 more than this
-//   mySerial.write(comFrame[i]);
-// }
-// delay(50);
-
-// //read response and send it to the serial monitor:
-// Serial.print ("Dobot response:  ");
-// while (mySerial.available() > 0){
-//   message[0] = mySerial.read();
-//   Serial.print(message[0]);
-//   Serial.print(' ');
-//   }
-//   Serial.println();
-// }
+//void Dobot::commandFrame(byte comFrame[]){
+//  
+//for(int i=0;i<(comFrame[2]+4);i++){   //The third comFrame byte gives the number of payload bytes; total number of bytes is 4 more than this
+//  mySerial.write(comFrame[i]);
+//}
+//delay(50);
+//
+////read response and send it to the serial monitor:
+//Serial.print ("Dobot response:  ");
+//while (mySerial.available() > 0){
+//  int message[0] = mySerial.read();
+//  Serial.print(message[0]);
+//  Serial.print(' ');
+//  }
+//  Serial.println();
+//}

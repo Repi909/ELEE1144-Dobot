@@ -1,31 +1,36 @@
 #include "Dobot.h"
 #include "irSensor.h"
-#include "Arduino.h"
 
 Dobot dobot = Dobot();
-char readMessage = -1;
+irSensor sensor = irSensor();
+
+char readMsg;
 
 void setup(){
-
-  dobot.begin();
-  delay(500);
+  //dobot.init();
+  Serial.begin(9600);
+  delay(1000);
 }
 
-int main(){
-  if (Serial.available()){
-     readMessage = Serial.read();
-    if (dobot.blockPresent()){
-      dobot.load(dobot.blockTypeDetector());
-    }
-    else if(readMessage==0|| readMessage==1||readMessage==2){
-      dobot.unload(readMessage);
-    }
-    else{
-      Serial.println("Zzzzzz...");
-    }
-    return 0;
-  }
-  else{
-    return 0;
-  }
+void loop(){
+  sensor.blockTypeDetector();
+
+  
+//  if (Serial.available()){
+//    readMsg = Serial.read();     
+//    if (dobot.blockPresent()){
+//      dobot.load(dobot.blockTypeDetector());
+//      delay(5000);
+//    }
+//    else if(Serial.read()=="block"){
+//      dobot.load(dobot.blockTypeDetector());
+//      delay(5000);
+//    }
+//    else if(readMsg==0|| readMsg==1||readMsg==2){
+//      dobot.unload(readMsg);
+//    }
+//    else{
+//      Serial.println("Zzzzzz...");
+//    }
+//  }
 }

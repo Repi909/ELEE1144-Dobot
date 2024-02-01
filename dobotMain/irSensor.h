@@ -9,10 +9,10 @@ class irSensor{
     public:
         irSensor();
         bool blockPresent();
-        uint8_t blockTypeDetector();
+        uint16_t blockTypeDetector();
     
     private:
-        uint8_t readSensor();
+        uint16_t readSensor();
 };
 
 #endif

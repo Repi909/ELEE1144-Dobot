@@ -12,7 +12,7 @@ class Dobot : public irSensor, public Counter {
   
     public:
         Dobot();
-        void begin();
+        void init();
         void load(uint8_t blockType);
         void unload(uint8_t storageBay);
 
@@ -21,7 +21,8 @@ class Dobot : public irSensor, public Counter {
         void makeSafe();
         void suckStart();
         void suckStop();
-        [[nodiscard]] uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex);
+        [[nodiscard]] uint8_t getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex);
+        void commandFrame(byte comFrame[]);
         //void printPose();
 
 };
