@@ -28,9 +28,9 @@ void Dobot::init() {
 }
 
 // Loads a block into a storage bay based on block type passed in as an argument. Moves block from import bay
-void Dobot::load(uint8_t blockType) {
+void Dobot::load() {
 
-  // uint8_t blockType = irSensor::blockDetector();
+  uint8_t blockType = irSensor::blockDetector();
   if (blockType < 100) {
     Serial.println("Loading...");
     if (blockType == 0) {
