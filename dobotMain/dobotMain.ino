@@ -1,7 +1,7 @@
 #include "Dobot.h"
 #include "irSensor.h"
 
-Dobot dobot = Dobot(2,3);
+Dobot dobot = Dobot(2,3,115200,115200);
 
 void setup(){
   dobot.init();

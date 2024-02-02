@@ -5,8 +5,6 @@
 #include "irSensor.h"
 #include "counter.h"
 
-// Globals:
-  // Rx, Tx
 byte incomingByte;  // To collect the response from Dobot
 
 Dobot::Dobot(uint8_t rx = 2, uint8_t tx = 3, int32_t dobotBaudRate = 115200, int32_t serialBaudRate = 115200) {
@@ -17,16 +15,11 @@ Dobot::Dobot(uint8_t rx = 2, uint8_t tx = 3, int32_t dobotBaudRate = 115200, int
   // Init serial comms to Dobot
   mySerial.begin(115200);   // Dobot baud rate
   Serial.begin(115200);     // Default baud rate for debugging COM
-  
+
+  Counter counter = Counter();
 }
 
-Counter counter = Counter();
-
 void Dobot::init() {
-
-  
-  
- 
 
   // Execute safe procedure
   Serial.println("Dobot initialising! Please wait..");
@@ -66,10 +59,11 @@ void Dobot::load() {
 }
 
 // Unloads a block from a storage bay specified in the argument. Moves the block to the export bay
-void Dobot::unload(uint8_t storageBay) {
-  if (storageBay < 4) {
+void Dobot::unload(int8_t storageBay) {
+  if (storageBay != -1) {
     Serial.println("Unloading...");
     if (storageBay == 0) {
+      Dobot::move(10, counter.whiteValue);
       Dobot::suckStart();
       Dobot::move(30, 2); // export bay
       Dobot::suckStop();

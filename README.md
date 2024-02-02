@@ -5,4 +5,4 @@
 + Error Handling with Dobot
 + Events & Event logging
 + Memory Management
-+ 
++ Queued Messages
