@@ -23,14 +23,14 @@ void Dobot::init() {
   mySerial.begin(115200);  // Dobot baud rate
 
   // Execute safe procedure
-  Serial.println("Dobot initialising!");
+  Serial.println("Dobot initialising! Please wait..");
   Dobot::makeSafe();
 }
 
 // Loads a block into a storage bay based on block type passed in as an argument. Moves block from import bay
 void Dobot::load() {
 
-  uint8_t blockType = irSensor::blockDetector();
+  uint8_t blockType = irSensor::blockTypeDetector();
   if (blockType < 100) {
     Serial.println("Loading...");
     if (blockType == 0) {
@@ -113,7 +113,7 @@ void Dobot::move(uint8_t blockType, uint8_t counter){
 //starts pump for suction
 void Dobot::suckStart(){
   int suckStartPayload[]{170,170,4,62,3,1,1,189};
-  for(int i=0; i<23; i++){
+  for(int i=0; i<8; i++){
     mySerial.write(suckStartPayload[i]);
   }
 }
@@ -121,7 +121,7 @@ void Dobot::suckStart(){
 //stops pump for suction
 void Dobot::suckStop(){
   int suckStopPayload[]{170,170,4,62,3,1,0,190};
-  for(int i=0;i<23;i++){
+  for(int i=0;i<8;i++){
     mySerial.write(suckStopPayload[i]);
   }
 }

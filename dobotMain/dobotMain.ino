@@ -5,18 +5,18 @@ Dobot dobot = Dobot();
 
 void setup(){
   dobot.init();
+  delay(10000);
 }
 
 void loop(){
-  if(dobot.blockPresent){
+  if(dobot.blockPresent()){
     dobot.load();
   }
   else{
     if(Serial.available()){
-      int readMsg = Serial.read()
-      if(readMsg!=''){
-        int msgNum = readMsg.toInt();
-        dobot.unload(msgNum);
+      int readMsg = Serial.read();
+      if(readMsg != -1){
+        dobot.unload(readMsg);
       }
     }
     else{
