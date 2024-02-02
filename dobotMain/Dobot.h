@@ -11,7 +11,7 @@
 class Dobot : public irSensor, public Counter {
   
     public:
-        Dobot();
+        Dobot(uint8_t rx, uint8_t tx);
         void init();
         void load();
         void unload(uint8_t storageBay);

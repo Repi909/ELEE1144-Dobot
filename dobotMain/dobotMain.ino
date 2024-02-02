@@ -1,20 +1,20 @@
 #include "Dobot.h"
 #include "irSensor.h"
 
-Dobot dobot = Dobot();
+Dobot dobot = Dobot(2,3);
 
 void setup(){
   dobot.init();
-  delay(10000);
 }
 
 void loop(){
+  //CREATE STATE MACHINE
   if(dobot.blockPresent()){
     dobot.load();
   }
   else{
     if(Serial.available()){
-      int readMsg = Serial.read();
+      int8_t readMsg = Serial.read();
       if(readMsg != -1){
         dobot.unload(readMsg);
       }

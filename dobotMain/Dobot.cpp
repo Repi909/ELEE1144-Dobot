@@ -6,21 +6,27 @@
 #include "counter.h"
 
 // Globals:
-SoftwareSerial mySerial(2,3);  // Rx, Tx
+  // Rx, Tx
 byte incomingByte;  // To collect the response from Dobot
 
-Dobot::Dobot() {
+Dobot::Dobot(uint8_t rx = 2, uint8_t tx = 3, int32_t dobotBaudRate = 115200, int32_t serialBaudRate = 115200) {
+  SoftwareSerial mySerial(rx,tx);
+  pinMode(rx, INPUT);
+  pinMode(tx, OUTPUT);
+  
+  // Init serial comms to Dobot
+  mySerial.begin(115200);   // Dobot baud rate
+  Serial.begin(115200);     // Default baud rate for debugging COM
+  
 }
 
 Counter counter = Counter();
 
 void Dobot::init() {
 
-  // Init serial comms to Dobot
-  Serial.begin(115200);
-  pinMode(2, INPUT);
-  pinMode(3, OUTPUT);
-  mySerial.begin(115200);  // Dobot baud rate
+  
+  
+ 
 
   // Execute safe procedure
   Serial.println("Dobot initialising! Please wait..");
