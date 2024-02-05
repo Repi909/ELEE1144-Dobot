@@ -1,10 +1,10 @@
 #include "Arduino.h"
-#include "irSensor.h"
+#include "IrSensor.h"
 
-irSensor::irSensor(){}
+IrSensor::IrSensor(){}
 
-bool irSensor::blockPresent(){
-    uint16_t sensorValue = readSensor();
+bool IrSensor::BlockPresent(){
+    uint16_t sensorValue = ReadSensor();
     if(sensorValue<290){
         return true;
     }
@@ -13,19 +13,19 @@ bool irSensor::blockPresent(){
     }
 }
 
-uint16_t irSensor::readSensor(){
+uint16_t IrSensor::ReadSensor(){
   uint16_t avgSensorValue = 0;
-  for (int i =0; i< 101; i++){
+  for (int i =0; i< 51; i++){
     avgSensorValue += analogRead(A0);
   }
-  return((avgSensorValue/100));
+  return((avgSensorValue/50));
 }
 
 //blockTypeCheck returns a numeric value in multiples of 10 as a maximum of 10 blocks for each type can be placed.
 //number is used within blockMap to return position element.
-uint16_t irSensor::blockTypeDetector(){
+uint16_t IrSensor::BlockTypeDetector(){
 
-    uint16_t avgSensorValue = irSensor::readSensor();
+    uint16_t avgSensorValue = IrSensor::ReadSensor();
 
     if((135 < avgSensorValue) && (avgSensorValue < 155)){
         Serial.println("White block detected! Starting loading sequence...");

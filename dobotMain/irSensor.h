@@ -4,15 +4,15 @@
 
 #include "Arduino.h"
 
-class irSensor{
+class IrSensor{
 
     public:
-        irSensor();
-        bool blockPresent();
-        uint16_t blockTypeDetector();
+        IrSensor();
+        bool BlockPresent();
+        uint16_t BlockTypeDetector();
     
     private:
-        uint16_t readSensor();
+        uint16_t ReadSensor();
 };
 
 #endif

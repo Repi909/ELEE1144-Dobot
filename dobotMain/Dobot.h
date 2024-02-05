@@ -5,24 +5,24 @@
 #include "Arduino.h"
 #include "SoftwareSerial.h"
 //#include "blockMap.h"
-#include "irSensor.h"
+#include "IrSensor.h"
 #include "counter.h"
 
-class Dobot : public irSensor, public Counter {
+class Dobot : public IrSensor, public Counter {
   
     public:
         Dobot(uint8_t rx, uint8_t tx);
-        void init();
-        void load();
-        void unload(uint8_t storageBay);
+        void Init();
+        void Load();
+        void Unload(uint8_t storageBay);
 
     private:
-        void move(uint8_t blockType, uint8_t counter);
-        void makeSafe();
-        void suckStart();
-        void suckStop();
-        [[nodiscard]] uint8_t getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex);
-        void commandFrame(byte comFrame[]);
+        void Move(uint8_t blockType, uint8_t counter);
+        void MakeSafe();
+        void SuckStart();
+        void SuckStop();
+        [[nodiscard]] uint8_t GetLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex);
+        void CommandFrame(byte comFrame[]);
         //void printPose();
 
 };
