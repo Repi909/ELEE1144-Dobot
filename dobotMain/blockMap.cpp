@@ -1,8 +1,8 @@
 #include "blockMap.h"
-#include <vector>
-#include <map>
 
-std::vector<std::vector<uint8_t>> bMap = {
+uint8_t blockMap::GetLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex){
+
+    uint8_t bMap[33][23]{
     //block type 0 (white)
     {170,170,19,84,3,0,0,0,25,67,0,0,24,67,0,0,79,194,0,0,0,0,225},
     {170,170,19,84,3,0,0,0,43,67,0,0,38,67,0,0,79,194,0,0,0,0,193},
@@ -44,11 +44,7 @@ std::vector<std::vector<uint8_t>> bMap = {
     {170,170,19,84,3,0,0,0,8,66,0,0,149,195,0,0,81,194,0,0,0,0,244}// export bay
     };
 
-blockMap::blockMap(){
-    bMap;
-};
+    return bMap[blockType + counterValue][loopIndex];
+}
 
-std::vector<uint8_t> getLocation(uint8_t blockType, uint8_t counterValue){
-
-    return bMap.at(blockType + counterValue);
-};
+blockMap::blockMap(){}

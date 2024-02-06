@@ -4,7 +4,7 @@
 
 #include "Arduino.h"
 #include "SoftwareSerial.h"
-//#include "blockMap.h"
+#include "blockMap.h"
 #include "IrSensor.h"
 #include "counter.h"
 
