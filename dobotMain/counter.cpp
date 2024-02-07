@@ -1,4 +1,4 @@
-#include "counter.h"
+#include "Counter.h"
 
 Counter::Counter(){
     int whiteValue = 0;

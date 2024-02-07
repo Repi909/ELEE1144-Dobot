@@ -1,9 +1,9 @@
 #include "Arduino.h"
 #include "Dobot.h"
 #include "SoftwareSerial.h"
-//#include "blockMap.h"
+#include "blockMap.h"
 #include "IrSensor.h"
-#include "counter.h"
+#include "Counter.h"
 
 Dobot::Dobot(uint8_t rx = 2, uint8_t tx = 3, int32_t dobotBaudRate = 115200, int32_t serialBaudRate = 115200) {
   SoftwareSerial mySerial(rx,tx);

@@ -1,6 +1,6 @@
-#include "blockMap.h"
+#include "BlockMap.h"
 
-uint8_t blockMap::GetLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex){
+uint8_t BlockMap::GetLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex){
 
     uint8_t bMap[33][23]{
     //block type 0 (white)
@@ -47,4 +47,4 @@ uint8_t blockMap::GetLocation(uint8_t blockType, uint8_t counterValue, uint8_t l
     return bMap[blockType + counterValue][loopIndex];
 }
 
-blockMap::blockMap(){}
+BlockMap::BlockMap(){}

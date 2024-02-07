@@ -6,10 +6,10 @@
 #include "SoftwareSerial.h"
 #include "blockMap.h"
 #include "IrSensor.h"
-#include "counter.h"
+#include "Counter.h"
 
 class Dobot : public IrSensor, public Counter {
-  
+
     public:
         Dobot(uint8_t rx, uint8_t tx);
         void Init();
