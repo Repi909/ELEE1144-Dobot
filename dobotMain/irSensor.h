@@ -12,6 +12,7 @@ class IrSensor{
         uint16_t BlockTypeDetector();
     
     private:
+        int minputPin;
         uint16_t ReadSensor();
 };
 

@@ -19,6 +19,7 @@ Dobot::Dobot(uint8_t rx = 2, uint8_t tx = 3, int32_t dobotBaudRate = 115200, int
 
 void Dobot::Init() {
   // Execute safe procedure
+  IrSensor::InitIrSensor();
   Serial.println("Dobot initialising! Please wait..");
   Dobot::MakeSafe();
 }

@@ -1,7 +1,12 @@
 #include "Arduino.h"
 #include "IrSensor.h"
 
-IrSensor::IrSensor(){}
+IrSensor::IrSensor(int inputPin = A0){
+    minputPin = inputPin;
+}
+
+void IrSensor::InitIrSensor(){
+}
 
 bool IrSensor::BlockPresent(){
     uint16_t sensorValue = ReadSensor();
