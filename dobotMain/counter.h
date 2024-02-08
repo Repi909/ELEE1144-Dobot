@@ -6,9 +6,9 @@ class Counter{
 
     public:
         Counter();
-        int whiteValue;
-        int redValue;
-        int blackValue;
+        int whiteValue = -1;
+        int redValue = -1;
+        int blackValue = -1;
 
 };
 

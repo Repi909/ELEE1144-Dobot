@@ -11,16 +11,23 @@ void setup(){
 void loop(){
   if(dobot.blockPresent()){
     dobot.load();
+    delay(5000);
   }
   else{
-    if(Serial.available()){
-      int readMsg = Serial.read();
-      if(readMsg != -1){
-        dobot.unload(readMsg);
+    String readMsg = Serial.readStringUntil('\n');
+    readMsg.toLowerCase();
+    if (readMsg != "clear"){
+      int intMsg = readMsg.toInt();
+      if(intMsg != 0){
+        dobot.unload(intMsg);
+      }
+      else{
+      Serial.println("Zzzzzz...");
       }
     }
     else{
-      Serial.println("Zzzzzz...");
+      dobot.ClearCommand();
     }
   }
+  delay(2000);
 }

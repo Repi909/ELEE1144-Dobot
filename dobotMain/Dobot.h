@@ -15,8 +15,10 @@ class Dobot : public irSensor, public Counter {
         void init();
         void load();
         void unload(uint8_t storageBay);
+        void ClearCommand();
 
     private:
+        void SetPTPJumpParams();
         void move(uint8_t blockType, uint8_t counter);
         void makeSafe();
         void suckStart();

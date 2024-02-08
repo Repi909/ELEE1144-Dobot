@@ -99,38 +99,39 @@ byte pickup[]={170,170,19,84,3,0,0,0,255,65,0,0,125,67,0,0,79,194,0,0,0,0,152};
 //delay(15000);
 Serial.print("get Pose");
 dobot.commandFrame(getPose);
-  delay(valdel);
-  Serial.print("cube11");
-  dobot.commandFrame(cube11);
-  delay(valdel);
-  Serial.print("cube12");
-  dobot.commandFrame(cube12);
-  delay(valdel);
-  Serial.print("cube13");  
-  dobot.commandFrame(cube13);
-  delay(valdel);
-  Serial.print("cube14");
-  dobot.commandFrame(cube14);
-  delay(valdel);
-  Serial.print("cube15");
-  dobot.commandFrame(cube15);
-  delay(valdel);
-  Serial.print("cube16");
-  dobot.commandFrame(cube16);
-  delay(valdel);
-  Serial.print("cube17");
-  dobot.commandFrame(cube17);
-  delay(valdel);
-  
-
-  
-//  dobot.commandFrame(pickup);
-//  delay(8000);
-//  dobot.commandFrame(suckpos);
-//  dobot.commandFrame(cube11);
-//  delay(4000);
-//  dobot.commandFrame(suckneg);
-
 }
-
-//dobot.commandFrame(commandStop);
+//  delay(valdel);
+//  Serial.print("cube11");
+//  dobot.commandFrame(cube11);
+//  delay(valdel);
+//  Serial.print("cube12");
+//  dobot.commandFrame(cube12);
+//  delay(valdel);
+//  Serial.print("cube13");  
+//  dobot.commandFrame(cube13);
+//  delay(valdel);
+//  Serial.print("cube14");
+//  dobot.commandFrame(cube14);
+//  delay(valdel);
+//  Serial.print("cube15");
+//  dobot.commandFrame(cube15);
+//  delay(valdel);
+//  Serial.print("cube16");
+//  dobot.commandFrame(cube16);
+//  delay(valdel);
+//  Serial.print("cube17");
+//  dobot.commandFrame(cube17);
+//  delay(valdel);
+//  
+//
+//  
+////  dobot.commandFrame(pickup);
+////  delay(8000);
+////  dobot.commandFrame(suckpos);
+////  dobot.commandFrame(cube11);
+////  delay(4000);
+////  dobot.commandFrame(suckneg);
+//
+//}
+//
+////dobot.commandFrame(commandStop);

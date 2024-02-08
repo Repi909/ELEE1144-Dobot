@@ -24,7 +24,15 @@ void Dobot::init() {
 
   // Execute safe procedure
   Serial.println("Dobot initialising! Please wait..");
+  Dobot::SetPTPJumpParams();
   Dobot::makeSafe();
+//  Serial.println("Would you like to calibrate sensor?");
+//  while(readMsg == ""){
+//    String readMsg = Serial.readStringUntil("\n").toLowerCase();
+//  }
+//  if(readMsg == "yes"){
+//    irSensor::BlockTypeCalibrator();
+//  }
 }
 
 // Loads a block into a storage bay based on block type passed in as an argument. Moves block from import bay
@@ -53,50 +61,53 @@ void Dobot::load() {
       counter.blackValue++;
     }
     Dobot::move(30, 0);
-    Serial.println("Loading complete!");
-  } else {
+  } 
+  else {
     Serial.println("Zzzzzz...");
   }
 }
 
-// Unloads a block from a storage bay specified in the argument. Moves the block to the export bay
+// Unloads a block from a storage bay specified in the argument. Moves the block to the export bay. TODO bug with 0?
 void Dobot::unload(uint8_t storageBay) {
-  if (storageBay < 4) {
-    Serial.println("Unloading...");
-    if (storageBay == 0) {
+  if (1 <= storageBay && storageBay <= 3 ) {
+    if (storageBay == 1 && counter.whiteValue > -1) {
+      Serial.println(counter.whiteValue);
+      Serial.println("Unloading...");
+      Dobot::move(0, (counter.whiteValue -1));
       Dobot::suckStart();
       Dobot::move(30, 2); // export bay
       Dobot::suckStop();
       counter.whiteValue--;
-    } else if (storageBay == 1) {
-      Dobot::move(10, counter.redValue);
+    } else if (storageBay == 2 && counter.redValue > -1) {
+      Serial.println("Unloading...");
+      Dobot::move(10, (counter.redValue - 1));
       Dobot::suckStart();
       Dobot::move(30, 2); // export bay
       Dobot::suckStop();
       counter.redValue--;
-    } else if (storageBay == 2) {
-      Dobot::move(20, counter.blackValue);
+    } else if (storageBay == 3 && counter.blackValue > -1) {
+      Serial.println("Unloading...");
+      Dobot::move(20, (counter.blackValue - 1));
       Dobot::suckStart();
       Dobot::move(30, 2); // export bay
       Dobot::suckStop();
       counter.blackValue--;
     }
+    else {
+    Serial.println("Invalid storage bay selected! Choose bay 1, 2, or 3. Also, please make sure there are blocks in the storage bay!");
+    }
     Dobot::move(30, 0);
-    Serial.println("Unloading complete!");
-  } else {
-    Serial.println("Invalid storage bay selected! Choose bay 0, 1, or 2.");
+  } 
+  else {
+    Serial.println("Invalid storage bay selected! Choose bay 1, 2, or 3. Also, please make sure there are blocks in the storage bay!");
   }
 }
 
 //moves to positions of home, load, unload and 3 storage bays for visual checks by user.
 void Dobot::makeSafe(){
-
-  for(int i=0;i<3;i++){ 
-    Dobot::move(30,i);
-  }
-  for(int i=0;i<30;i++){ 
-    Dobot::move(i,0);
-    i+=9;
+  byte homing[] = {170,170,6,31,1,0,0,0,0,224};
+  for(int i=0;i<10;i++){
+    mySerial.write(homing[i]);
   }
   Dobot::move(30,0);
 }
@@ -130,11 +141,11 @@ uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loop
 
     uint8_t bMap[33][23]{
     //block type 0 (white)
-    {170,170,19,84,3,0,0,0,25,67,0,0,24,67,0,0,79,194,0,0,0,0,225},
-    {170,170,19,84,3,0,0,0,43,67,0,0,38,67,0,0,79,194,0,0,0,0,193},
-    {170,170,19,84,3,0,0,0,64,67,0,0,53,67,0,0,79,194,0,0,0,0,157},
-    {170,170,19,84,3,0,0,0,85,67,0,0,67,67,0,0,79,194,0,0,0,0,122},
     {170,170,19,84,3,0,0,0,106,67,0,0,82,67,0,0,79,194,0,0,0,0,86},
+    {170,170,19,84,3,0,0,0,85,67,0,0,67,67,0,0,79,194,0,0,0,0,122},
+    {170,170,19,84,3,0,0,0,64,67,0,0,53,67,0,0,79,194,0,0,0,0,157},
+    {170,170,19,84,3,0,0,0,43,67,0,0,38,67,0,0,79,194,0,0,0,0,193},
+    {170,170,19,84,3,0,0,0,25,67,0,0,24,67,0,0,79,194,0,0,0,0,225},
     {170,170,19,84,3,0,0,0,106,67,0,0,82,67,0,0,210,193,0,0,0,0,212},
     {170,170,19,84,3,0,0,0,85,67,0,0,67,67,0,0,210,193,0,0,0,0,248},
     {170,170,19,84,3,0,0,0,68,67,0,0,52,67,0,0,210,193,0,0,0,0,24},
@@ -142,11 +153,11 @@ uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loop
     {170,170,19,84,3,0,0,0,31,67,0,0,25,67,0,0,210,193,0,0,0,0,88},
     
     //block type 1 (red)
-    {170,170,19,84,3,0,0,0,55,67,0,0,85,193,0,0,79,194,0,0,0,0,8},
-    {170,170,19,84,3,0,0,0,78,67,0,0,246,255,0,0,79,194,0,0,0,0,18},
-    {170,170,19,84,3,0,0,0,103,67,0,0,102,193,0,0,79,194,0,0,0,0,199},
-    {170,170,19,84,3,0,0,0,67,185,0,0,193,180,0,0,79,194,0,0,0,0,39},
     {170,170,19,84,3,0,0,0,137,67,0,0,90,193,0,0,79,194,0,0,0,0,177},
+    {170,170,19,84,3,0,0,0,67,185,0,0,193,180,0,0,79,194,0,0,0,0,39},
+    {170,170,19,84,3,0,0,0,103,67,0,0,102,193,0,0,79,194,0,0,0,0,199},
+    {170,170,19,84,3,0,0,0,78,67,0,0,246,255,0,0,79,194,0,0,0,0,18},
+    {170,170,19,84,3,0,0,0,55,67,0,0,85,193,0,0,79,194,0,0,0,0,8},
     {170,170,19,84,3,0,0,0,55,67,0,0,85,193,0,0,210,194,0,0,0,0,133},
     {170,170,19,84,3,0,0,0,78,67,0,0,246,255,0,0,210,194,0,0,0,0,143},
     {170,170,19,84,3,0,0,0,103,67,0,0,102,193,0,0,210,194,0,0,0,0,68},
@@ -154,11 +165,11 @@ uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loop
     {170,170,19,84,3,0,0,0,137,67,0,0,90,193,0,0,210,194,0,0,0,0,46},
 
     //block type 2(black)
-    {170,170,19,84,3,0,0,0,166,66,0,0,65,195,0,0,79,194,0,0,0,0,172},
-    {170,170,19,84,3,0,0,0,185,66,0,0,88,195,0,0,79,194,0,0,0,0,130},
-    {170,170,19,84,3,0,0,0,198,66,0,0,110,195,0,0,79,194,0,0,0,0,95},
-    {170,170,19,84,3,0,0,0,215,66,0,0,130,195,0,0,79,194,0,0,0,0,58},
     {170,170,19,84,3,0,0,0,229,66,0,0,142,195,0,0,79,194,0,0,0,0,32},
+    {170,170,19,84,3,0,0,0,215,66,0,0,130,195,0,0,79,194,0,0,0,0,58},
+    {170,170,19,84,3,0,0,0,198,66,0,0,110,195,0,0,79,194,0,0,0,0,95},
+    {170,170,19,84,3,0,0,0,185,66,0,0,88,195,0,0,79,194,0,0,0,0,130},
+    {170,170,19,84,3,0,0,0,166,66,0,0,65,195,0,0,79,194,0,0,0,0,172},
     {170,170,19,84,3,0,0,0,166,66,0,0,65,195,0,0,210,194,0,0,0,0,41},
     {170,170,19,84,3,0,0,0,185,66,0,0,88,195,0,0,210,194,0,0,0,0,255},
     {170,170,19,84,3,0,0,0,198,66,0,0,110,195,0,0,210,194,0,0,0,0,158},
@@ -166,11 +177,25 @@ uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loop
     {170,170,19,84,3,0,0,0,229,66,0,0,142,195,0,0,210,194,0,0,0,0,157},
 
     {170,170,19,84,3,0,0,0,52,67,0,0,0,0,0,0,0,0,0,0,0,50}, //home
-    {170,170,19,84,3,0,0,0,255,65,0,0,125,67,0,0,79,194,0,0,0,0,152},  //import bay
-    {170,170,19,84,3,0,0,0,8,66,0,0,149,195,0,0,81,194,0,0,0,0,244}// export bay
+    {170,170,19,84,3,0,0,0,255,65,0,0,125,67,0,0,34,194,0,0,0,0,197},  //import bay
+    {170,170,19,84,3,0,0,0,8,66,0,0,149,195,0,0,79,194,0,0,0,0,246}// export bay
     };
 
     return bMap[blockType + counterValue][loopIndex];
+}
+
+void Dobot::ClearCommand(){
+  Serial.println("Clearing commands!");
+  for(int i=0; i<6; i++){
+    byte clearCommand[] = {170,170,2,245,1,10};
+    mySerial.write(clearCommand[i]);
+  }
+}
+void Dobot::SetPTPJumpParams(){
+    for(int i=0; i<14; i++){
+    byte jumpParams[] = {170,170,10,82,3,0,0,112,66,0,0,112,66,71};
+    mySerial.write(jumpParams[i]);
+    }
 }
 
 //void Dobot::commandFrame(byte comFrame[]){
