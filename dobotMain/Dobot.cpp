@@ -1,7 +1,6 @@
 #include "Arduino.h"
 #include "Dobot.h"
 #include "SoftwareSerial.h"
-//#include "blockMap.h"
 #include "irSensor.h"
 #include "counter.h"
 
@@ -14,6 +13,7 @@ Dobot::Dobot() {
 
 Counter counter = Counter();
 
+//Initialise function to start Dobot communications and serial communications. Sets jump height to be higher than 2 blocks so blocks aren't knocked by movement.
 void Dobot::init() {
 
   // Init serial comms to Dobot
@@ -26,16 +26,9 @@ void Dobot::init() {
   Serial.println("Dobot initialising! Please wait..");
   Dobot::SetPTPJumpParams();
   Dobot::makeSafe();
-//  Serial.println("Would you like to calibrate sensor?");
-//  while(readMsg == ""){
-//    String readMsg = Serial.readStringUntil("\n").toLowerCase();
-//  }
-//  if(readMsg == "yes"){
-//    irSensor::BlockTypeCalibrator();
-//  }
 }
 
-// Loads a block into a storage bay based on block type passed in as an argument. Moves block from import bay
+// Loads a block into a storage bay based on block type identified by blockTypeDetector method. Moves block from import bay to correct storage bay. Block Type 0,10,20 correspond to "map" array values.
 void Dobot::load() {
 
   uint8_t blockType = irSensor::blockTypeDetector();
@@ -67,7 +60,7 @@ void Dobot::load() {
   }
 }
 
-// Unloads a block from a storage bay specified in the argument. Moves the block to the export bay. TODO bug with 0?
+// Unloads a block from a storage bay specified in the argument (1,2,3). Moves the block to the export bay. #TODO bug with 0?
 void Dobot::unload(uint8_t storageBay) {
   if (1 <= storageBay && storageBay <= 3 ) {
     if (storageBay == 1 && counter.whiteValue > -1) {
@@ -103,7 +96,7 @@ void Dobot::unload(uint8_t storageBay) {
   }
 }
 
-//moves to positions of home, load, unload and 3 storage bays for visual checks by user.
+//moves to position of home upon start.
 void Dobot::makeSafe(){
   byte homing[] = {170,170,6,31,1,0,0,0,0,224};
   for(int i=0;i<10;i++){
@@ -137,6 +130,7 @@ void Dobot::suckStop(){
   }
 }
 
+//gets location from map of specific block to place based on blocktype, block counter and loop index.
 uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex){
 
     uint8_t bMap[33][23]{
@@ -184,6 +178,7 @@ uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loop
     return bMap[blockType + counterValue][loopIndex];
 }
 
+//clear command by typing clear into serial monitor. #TODO add pump off as if clear called before pump on command, pump stays on.
 void Dobot::ClearCommand(){
   Serial.println("Clearing commands!");
   for(int i=0; i<6; i++){
@@ -198,6 +193,7 @@ void Dobot::SetPTPJumpParams(){
     }
 }
 
+//debug communications from dobot back to user.
 //void Dobot::commandFrame(byte comFrame[]){
 //  
 //for(int i=0;i<(comFrame[2]+4);i++){   //The third comFrame byte gives the number of payload bytes; total number of bytes is 4 more than this

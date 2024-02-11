@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include "irSensor.h"
 
+//constructor with default values for sensor bounds. Programmatic setting WIP
 irSensor::irSensor(){
   uint16_t whiteLowerBound = 400;
   uint16_t whiteUpperBound = 499;
@@ -9,6 +10,53 @@ irSensor::irSensor(){
   uint16_t blackLowerBound = 850;
   uint16_t blackUpperBound = 949;
   }
+
+//checks if block is present if sensor read is below 910 value.
+bool irSensor::blockPresent(){
+    uint16_t sensorValue = readSensor();
+    if(sensorValue<910){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+// reads analogPin A0. Changes in future changes branch to add pin set in constructor
+uint16_t irSensor::readSensor(){
+  uint32_t avgSensorValue = 0;
+  for (int i =0; i< 101; i++){
+    avgSensorValue += analogRead(A0);
+  }
+  return((avgSensorValue/100));
+}
+
+//blockTypeCheck returns a numeric value in multiples of 10 as a maximum of 10 blocks for each type can be placed.
+//number is used within blockMap to return position element.
+uint16_t irSensor::blockTypeDetector(){
+
+    uint16_t avgSensorValue = irSensor::readSensor();
+
+    if((whiteLowerBound < avgSensorValue) && (avgSensorValue < whiteUpperBound)){
+        Serial.println("White block detected! Starting loading sequence...");
+        return 0;
+    }
+
+    else if ((redLowerBound < avgSensorValue) && (avgSensorValue < redUpperBound)){
+        Serial.println("Red block detected! Starting loading sequence...");
+        return 10;
+    }
+
+    else if((blackLowerBound < avgSensorValue) && (avgSensorValue < blackUpperBound)){
+        Serial.println("Black block detected! Starting loading sequence...");
+        return 20;
+    }
+
+    else{
+        Serial.println("Invalid block detected!");
+        return 100;
+    }
+}
 
 //void irSensor::BlockTypeCalibrator(){
 //  String readMsg;
@@ -37,49 +85,3 @@ irSensor::irSensor(){
 //
 //  //TODO check if ranges crossover
 //}
-
-bool irSensor::blockPresent(){
-    uint16_t sensorValue = readSensor();
-    if(sensorValue<910){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-uint16_t irSensor::readSensor(){
-  uint32_t avgSensorValue = 0;
-  for (int i =0; i< 101; i++){
-    avgSensorValue += analogRead(A0);
-  }
-  return((avgSensorValue/100));
-}
-
-//blockTypeCheck returns a numeric value in multiples of 10 as a maximum of 10 blocks for each type can be placed.
-//number is used within blockMap to return position element.
-uint16_t irSensor::blockTypeDetector(){
-
-    uint16_t avgSensorValue = irSensor::readSensor();
-//    Serial.println(avgSensorValue);
-
-    if((whiteLowerBound < avgSensorValue) && (avgSensorValue < whiteUpperBound)){
-        Serial.println("White block detected! Starting loading sequence...");
-        return 0;
-    }
-
-    else if ((redLowerBound < avgSensorValue) && (avgSensorValue < redUpperBound)){
-        Serial.println("Red block detected! Starting loading sequence...");
-        return 10;
-    }
-
-    else if((blackLowerBound < avgSensorValue) && (avgSensorValue < blackUpperBound)){
-        Serial.println("Black block detected! Starting loading sequence...");
-        return 20;
-    }
-
-    else{
-        Serial.println("Invalid block detected!");
-        return 100;
-    }
-}

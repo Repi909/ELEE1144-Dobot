@@ -1,0 +1,30 @@
+init Dobot
+init blockMap
+
+safety check
+---
+send dobot home
+send dobot load
+send dobot bay 1
+send dobot bay 2
+send dobot bay 3
+send dobot home
+
+if block detected (loading)
+check blocktype
+move arm to load bay
+get element from map for block placement
+move the block to storage
+return home
+increment counter
+
+else check if serial command (unload)
+get counter number
+check counter > 0
+get position of last element
+move to last element placed
+pickup and move to export bay
+move to home
+decrease counter
+
+else idle
