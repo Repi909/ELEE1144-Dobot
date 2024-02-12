@@ -63,7 +63,7 @@ void Dobot::load() {
 // Unloads a block from a storage bay specified in the argument (1,2,3). Moves the block to the export bay. #TODO bug with 0?
 void Dobot::unload(uint8_t storageBay) {
   if (1 <= storageBay && storageBay <= 3 ) {
-    if (storageBay == 1 && counter.whiteValue > -1) {
+    if (storageBay == 1 && counter.whiteValue > 0) {
       Serial.println(counter.whiteValue);
       Serial.println("Unloading...");
       Dobot::move(0, (counter.whiteValue -1));
@@ -71,14 +71,14 @@ void Dobot::unload(uint8_t storageBay) {
       Dobot::move(30, 2); // export bay
       Dobot::suckStop();
       counter.whiteValue--;
-    } else if (storageBay == 2 && counter.redValue > -1) {
+    } else if (storageBay == 2 && counter.redValue > 0) {
       Serial.println("Unloading...");
       Dobot::move(10, (counter.redValue - 1));
       Dobot::suckStart();
       Dobot::move(30, 2); // export bay
       Dobot::suckStop();
       counter.redValue--;
-    } else if (storageBay == 3 && counter.blackValue > -1) {
+    } else if (storageBay == 3 && counter.blackValue > 0) {
       Serial.println("Unloading...");
       Dobot::move(20, (counter.blackValue - 1));
       Dobot::suckStart();
