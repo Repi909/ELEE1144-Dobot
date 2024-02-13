@@ -13,7 +13,7 @@ Dobot::Dobot() {
 
 Counter counter = Counter();
 
-//Initialise function to start Dobot communications and serial communications. Sets jump height to be higher than 2 blocks so blocks aren't knocked by movement.
+//Initialise function to start Dobot communications and serial communications. Sets jump height. Homes dobot.
 void Dobot::init() {
 
   // Init serial comms to Dobot
@@ -28,7 +28,7 @@ void Dobot::init() {
   Dobot::makeSafe();
 }
 
-// Loads a block into a storage bay based on block type identified by blockTypeDetector method. Moves block from import bay to correct storage bay. Block Type 0,10,20 correspond to "map" array values.
+// Loads a block into a storage bay based on block type identified by blockTypeDetector method. Moves block from import bay to correct storage bay. Block Type 0,10,20 correspond to "mapped" array values.
 void Dobot::load() {
 
   uint8_t blockType = irSensor::blockTypeDetector();
@@ -63,10 +63,10 @@ void Dobot::load() {
 // Unloads a block from a storage bay specified in the argument (1,2,3). Moves the block to the export bay. #TODO bug with 0?
 void Dobot::unload(uint8_t storageBay) {
   if (1 <= storageBay && storageBay <= 3 ) {
-    if (storageBay == 1 && counter.whiteValue > 0) {
+    if (storageBay == 1 && counter.whiteValue > 0) {  //checks storage bay and if block has been placed previously.
       Serial.println(counter.whiteValue);
       Serial.println("Unloading...");
-      Dobot::move(0, (counter.whiteValue -1));
+      Dobot::move(0, (counter.whiteValue -1)); //counter decrement to sort bug with unloading position +1.
       Dobot::suckStart();
       Dobot::move(30, 2); // export bay
       Dobot::suckStop();
@@ -96,9 +96,9 @@ void Dobot::unload(uint8_t storageBay) {
   }
 }
 
-//moves to position of home upon start.
+//homes the dobot to 0 position.
 void Dobot::makeSafe(){
-  byte homing[] = {170,170,6,31,1,0,0,0,0,224};
+  byte homing[] = {170,170,6,31,1,0,0,0,0,224}; //homing payload to make sure fully calibrated. "Bit iffy" :s
   for(int i=0;i<10;i++){
     mySerial.write(homing[i]);
   }
@@ -133,7 +133,8 @@ void Dobot::suckStop(){
 //gets location from map of specific block to place based on blocktype, block counter and loop index.
 uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loopIndex){
 
-    uint8_t bMap[33][23]{
+  uint8_t bMap[33][23]{
+    
     //block type 0 (white)
     {170,170,19,84,3,0,0,0,106,67,0,0,82,67,0,0,79,194,0,0,0,0,86},
     {170,170,19,84,3,0,0,0,85,67,0,0,67,67,0,0,79,194,0,0,0,0,122},
@@ -178,14 +179,19 @@ uint8_t Dobot::getLocation(uint8_t blockType, uint8_t counterValue, uint8_t loop
     return bMap[blockType + counterValue][loopIndex];
 }
 
-//clear command by typing clear into serial monitor. #TODO add pump off as if clear called before pump on command, pump stays on.
+//clear command by typing clear into serial monitor(logic is in main).
 void Dobot::ClearCommand(){
   Serial.println("Clearing commands!");
+  int suckStopPayload[]{170,170,4,62,3,1,0,190};
+  byte clearCommand[]{170,170,2,245,1,10};
   for(int i=0; i<6; i++){
-    byte clearCommand[] = {170,170,2,245,1,10};
     mySerial.write(clearCommand[i]);
   }
+  suckStop();
+  move(30,0);
 }
+
+//sets jump heigh to 2 blocks high to avoid collision with stacked blocks.
 void Dobot::SetPTPJumpParams(){
     for(int i=0; i<14; i++){
     byte jumpParams[] = {170,170,10,82,3,0,0,112,66,0,0,112,66,71};
